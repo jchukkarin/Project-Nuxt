@@ -10,9 +10,6 @@ jobs:
   deploy :
     name: "Deploy to NuxtHub"
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,8 +27,3 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Build & Deploy to NuxtHub
-        uses: nuxt-hub/action@v3
-
-  
