@@ -1,29 +1,59 @@
-name : Deployments to Azure
+# .github/workflows/azure-deploy.yml
+name: Deploy to Azure App Service
 
-on :
-  push :
-     branches :
-       - main
+on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
-  
+
 jobs:
-  deploy :
-    name: "Deploy to NuxtHub"
+  build-and-deploy:
+    name: Build and Deploy to Azure
     runs-on: ubuntu-latest
+    
     steps:
+      # 1. Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
+      # 2. Setup pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.23.0
-
+      
+      # 3. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-
+      
+      # 4. Install dependencies
       - name: Install dependencies
         run: pnpm install
+      
+      # 5. Build application
+      - name: Build Nuxt application
+        run: pnpm run build
+      
+      # 6. Create deployment package
+#      
+#      - name: Create deployment package 
+#        run: |
+#          mkdir deploy
+#          cp -r .output deploy/
+#          cp package.json deploy/
+#          cp pnpm-lock.yaml deploy/
+#          cd deploy
+#          tar -czf ../deployment.tar.gz .
+#      
+      # 7. Deploy to Azure App Service
+ #     - name: Deploy to Azure Web App
+ #       uses: azure/webapps-deploy@v3
+ #       with:
+ #         app-name: 'your-app-name'  # ⚠️ เปลี่ยนเป็นชื่อ App Service ของคุณ
+ #         slot-name: 'production'
+ #         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+  #        package: deployment.tar.gz 
